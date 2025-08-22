@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TAR</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+     /* Fullscreen video background */
+    .video-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none; /* so clicks go through video */
+    }
+
+    /* Foreground content */
+    .content {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: white;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+      background: rgba(0, 0, 0, 0.3); /* transparent overlay */
+      border-radius: 10px;
+      padding: 40px;
+    }
+    body {
+      background: #f8f9fa;
+      color: #ffffff;
+      line-height: 1.6;
+    }
+    header {
+      background: #111;
+      color: #fff;
+      padding: 1.5rem 2rem;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 2rem;
+    }
+    header p {
+      font-size: 1rem;
+      color: #bbb;
+    }
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 2rem;
+    }
+    .about {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .about img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      margin-bottom: 1rem;
+    }
+    .portfolio {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .instagram {
+      text-align: center;
+      margin: 3rem 0;
+    }
+    .instagram a {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #ede9ea;+
+      color: #fff;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .instagram a:hover {
+      background: #747074;
+    }
+    footer {
+      background: #111;
+      color: #bbb;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 3rem;
+    }
+    .Login{
+      text-align: center;
+      margin: 3rem 0;
+    }
+    .Login a {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #f9f6f6;
+      color: #060000;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .Login a:hover {
+      background: #685c19;
+  </style>
+</head>
+<body>
+  
+   <!-- YouTube video background -->
+  <iframe class="video-background"
+    src="https://www.youtube.com/embed/sQ22pm-xvrE?autoplay=1&mute=1&controls=0&showinfo=0&loop=1&playlist=sQ22pm-xvrE"
+    frameborder="0"
+    allow="autoplay; fullscreen"
+    allowfullscreen>
+  </iframe>
+   
+    
+    
+ 
+
+  <header>
+    <h1>TAR-Transforming Atomation Resources</h1>
+    <p>Welcome to our website</p>
+  </header>
+
+  <div class="container">
+    <!-- About Section -->
+    <section class="about">
+      <img src="C:\Users\basud\Downloads\WhatsApp Image 2025-08-22 at 10.58.23 PM.jpeg" alt="TAR">
+      <h2>Hello, I'm Jarvis</h2>
+      <p>Transforming Automation Project (TAR) is an initiative to modernize and streamline processes using RPA, AI, and ML.
+It reduces manual work and increases efficiency across industries.
+Repetitive tasks are automated, freeing employees for higher-value roles.
+Accuracy and compliance improve with minimal human errors.
+Productivity rises as process cycles become faster and scalable.
+TAR supports digital transformation and data-driven decision-making.
+In healthcare, TAR automates patient data management and EHR updates.
+It speeds up medical billing and claims while reducing errors.
+AI aids in diagnostics and improves scheduling for patients.
+Overall, TAR reduces administrative burden and enhances patient care quality.</p>
+    </section>
+
+    <!-- Instagram Section -->
+    <section class="instagram">
+      <h2>Automation</h2>
+      <a href="http://10.163.96.88:5001" target="_blank">Automation</a>
+    </section>
+    <!-- login Section -->
+    <section class="Login">
+      <h2>Health care</h2>
+      <a href="http://10.163.96.88:5000" target="_blank">Health Care</a>
+    </section>
+  <footer>
+    <p>© 2025 Jarvis | All Rights Reserved</p>
+  </footer>
+
+</body>
+</html>
