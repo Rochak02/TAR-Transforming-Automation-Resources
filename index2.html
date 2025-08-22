@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Control</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Add Socket.IO Client -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Home Control</h1>
+            <button id="add-device-btn" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>Add Device</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="container" id="main-container">
+        <div id="dashboard-content">
+            <!-- Devices will be dynamically inserted here -->
+        </div>
+
+        <div id="chat-container">
+            <div id="chat-messages">
+                <div class="message assistant">
+                    <span>Hello! How can I help you control your home today?</span>
+                </div>
+            </div>
+            <form id="chat-form">
+                <input type="text" id="chat-input" placeholder="e.g., Turn on the living room light" autocomplete="off" required>
+                <button type="submit" id="chat-submit-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- NEW: Voice Assistant Status Footer -->
+    <footer id="status-footer">
+        <div class="status-indicator-light" id="status-light"></div>
+        <span id="status-message">Initializing...</span>
+    </footer>
+
+    <!-- Add Device Modal -->
+    <div id="add-device-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>Add New Device</h2>
+            <form id="add-device-form">
+                <div id="modal-error" class="error-message" style="display: none;"></div>
+                <div class="form-group">
+                    <label for="device-name">Device Name</label>
+                    <input type="text" id="device-name" placeholder="e.g., Living Room Lamp" required>
+                </div>
+                <div class="form-group">
+                    <label for="device-ip">IP Address</label>
+                    <input type="text" id="device-ip" placeholder="e.g., 192.168.1.101" required>
+                </div>
+                <div class="form-group">
+                    <label for="device-room">Room</label>
+                    <input type="text" id="device-room" placeholder="e.g., Living Room" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="cancel-btn" class="btn">Cancel</button>
+                    <button type="submit" id="submit-device-btn" class="btn btn-primary">
+                        <span>Add Device</span>
+                        <div class="spinner" style="display: none;"></div>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Templates for dynamic content -->
+    <template id="room-section-template">
+        <section class="room-section">
+            <h2 class="room-title"></h2>
+            <div class="devices-grid"></div>
+        </section>
+    </template>
+
+    <template id="device-card-template">
+        <div class="device-card">
+            <div class="card-header">
+                <div>
+                    <h3 class="device-name"></h3>
+                    <p class="device-ip"></p>
+                </div>
+                <button class="remove-device-btn" title="Remove Device">&times;</button>
+            </div>
+            <div class="relay-controls"></div>
+        </div>
+    </template>
+
+    <template id="relay-control-template">
+        <div class="relay-control">
+            <div class="relay-info">
+                <svg class="light-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5C17.7 10.2 18 9 18 7.5a6 6 0 0 0-12 0c0 1.5.3 2.7 1.5 3.9.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                <span class="relay-name"></span>
+                <input type="text" class="relay-name-input" style="display: none;" />
+            </div>
+            <label class="switch">
+                <input type="checkbox" class="relay-toggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </template>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
