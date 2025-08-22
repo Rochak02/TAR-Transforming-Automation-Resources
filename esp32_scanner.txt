@@ -1,0 +1,107 @@
+/*
+ * This code is for the ESP32.
+ * 1. It connects to your Wi-Fi network.
+ * 2. It uses the MFRC522 module to read RFID tags.
+ * 3. When a tag is scanned, it extracts the Unique ID (UID).
+ * 4. It sends the UID to a web server running on a Raspberry Pi.
+ * * Make sure to replace the placeholder values for:
+ * - YOUR_WIFI_SSID
+ * - YOUR_WIFI_PASSWORD
+ * - YOUR_RASPBERRY_PI_IP
+ */
+
+#include <SPI.h>
+#include <MFRC522.h>
+#include <WiFi.h>
+#include <HTTPClient.h>
+
+// --- PIN DEFINITIONS ---
+#define SS_PIN    5  // ESP32 pin GPIO5
+#define RST_PIN   22 // ESP32 pin GPIO22
+
+// --- WIFI & SERVER DEFINITIONS ---
+const char* ssid = "YOUR_WIFI_SSID";
+const char* password = "YOUR_WIFI_PASSWORD";
+const char* raspberryPiIp = "YOUR_RASPBERRY_PI_IP"; // The IP of your Raspberry Pi
+
+// Create MFRC522 instance
+MFRC522 mfrc522(SS_PIN, RST_PIN);
+
+void setup() {
+  Serial.begin(115200); // Initialize serial communications
+  SPI.begin();          // Init SPI bus
+  mfrc522.PCD_Init();   // Init MFRC522 card
+
+  // --- Connect to Wi-Fi ---
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.println("WiFi connected!");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+
+  Serial.println("Scan an RFID card to proceed...");
+}
+
+void loop() {
+  // Look for new cards
+  if (!mfrc522.PICC_IsNewCardPresent() || !mfrc522.PICC_ReadCardSerial()) {
+    delay(50);
+    return;
+  }
+
+  Serial.print("Card UID: ");
+  String uidString = "";
+  for (byte i = 0; i < mfrc522.uid.size; i++) {
+    Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
+    Serial.print(mfrc522.uid.uidByte[i], HEX);
+    uidString += String(mfrc522.uid.uidByte[i], HEX);
+  }
+  Serial.println();
+  uidString.toUpperCase();
+
+  // Send the UID to the Raspberry Pi Server
+  sendUidToServer(uidString);
+
+  // Halt PICC
+  mfrc522.PICC_HaltA();
+  // Stop encryption on PCD
+  mfrc522.PCD_StopCrypto1();
+
+  delay(2000); // Wait 2 seconds before next scan
+}
+
+void sendUidToServer(String uid) {
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+
+    // Construct the URL: http://<RASPBERRY_PI_IP>:5000/user/<UID>
+    String serverUrl = "http://" + String(raspberryPiIp) + ":5000/user/" + uid;
+
+    Serial.print("Sending request to: ");
+    Serial.println(serverUrl);
+
+    http.begin(serverUrl);
+    int httpResponseCode = http.GET();
+
+    if (httpResponseCode > 0) {
+      Serial.print("HTTP Response code: ");
+      Serial.println(httpResponseCode);
+      String payload = http.getString();
+      Serial.println(payload);
+    } else {
+      Serial.print("Error code: ");
+      Serial.println(httpResponseCode);
+    }
+    http.end();
+  } else {
+    Serial.println("WiFi Disconnected");
+  }
+}
